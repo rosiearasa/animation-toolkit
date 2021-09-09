@@ -24,7 +24,7 @@ void scene() {
   //update
  void update(){
   vel = vec3(agl::randomUnitVector())* 100.0f;
-  currentPosition = currentPosition + vel * dt();
+  currentPosition += currentPosition + vel * dt();
   }
 
 
