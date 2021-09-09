@@ -4,6 +4,7 @@
 using glm::vec3;
 vec3 currentPosition;
 vec3 vel;
+
 class Sphere3D : public atkui::Framework {
  public:
   Sphere3D() : atkui::Framework(atkui::Perspective) {
@@ -16,21 +17,13 @@ void scene() {
 
     // draw a sphere at center of the world
     float radius = 50.0;
-    drawSphere(vec3(0), radius);
+    drawSphere(currentPosition, radius);
   
   }
-
-
-  //the initial position of the sphere
-void setup(){
-    currentPosition = vec3(0,0,0);
-    vel = vec3(agl::randomUnitVector());
-  }
-
-
-
+  
   //update
  void update(){
+  vel = vec3(agl::randomUnitVector())* 100.0f;
   currentPosition = currentPosition + vel * dt();
   }
 
