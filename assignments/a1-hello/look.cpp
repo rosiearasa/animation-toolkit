@@ -1,5 +1,6 @@
 #include "atkui/framework.h"
 
+
 using namespace glm;
 
 class Look : public atkui::Framework {
@@ -15,7 +16,7 @@ class Look : public atkui::Framework {
   virtual void scene() {
     vec3 target = vec3(_mouseX, _mouseY, 0);
     setColor(vec3(1,0,0));
-    drawSphere(target, 5);
+    drawSphere(target, 15);
   }
 
   void mouseMove(int x, int y) {
@@ -29,6 +30,7 @@ class Look : public atkui::Framework {
 };
 
 int main(int argc, char** argv) {
+  
   Look viewer;
   viewer.run();
   return 0;

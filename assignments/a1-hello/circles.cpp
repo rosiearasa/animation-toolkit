@@ -8,7 +8,7 @@ public:
    }
 
    virtual void setup() {
-      
+
       
 
 
@@ -16,8 +16,14 @@ public:
 
    virtual void scene() {
       
+      
 
    }
+   private:
+   float currentPosition;
+   float thetha;
+
+   
 
 };
 
