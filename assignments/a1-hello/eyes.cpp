@@ -44,8 +44,6 @@ class Eyes : public atkui::Framework
 private:
     float theta;
     float thetaRate;
-   
-
 
 };
 

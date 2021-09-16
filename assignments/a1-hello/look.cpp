@@ -17,9 +17,19 @@ class Look : public atkui::Framework {
     vec3 target = vec3(_mouseX, _mouseY, 0);
     setColor(vec3(1,0,0));
     drawSphere(target, 15);
+   
+   
+
   }
 
-  void mouseMove(int x, int y) {
+ virtual void mouseDown(int button, int action){
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS){
+    //move the circle
+    }
+  }
+
+ virtual void mouseMove(int x, int y) {
     _mouseX = x;
     _mouseY = height() - y;
   }
@@ -27,6 +37,11 @@ class Look : public atkui::Framework {
  private:
   int _mouseX;
   int _mouseY;
+
+
+  float theta;
+  float thetaRate;
+
 };
 
 int main(int argc, char** argv) {
