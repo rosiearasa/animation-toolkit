@@ -18,13 +18,13 @@ virtual void scene() {
     // draw a sphere at center of the world
     float radius = 50.0;
     drawSphere(currentPosition, radius);
+    update();
   
   }
   
   //update
  virtual void update(){
-  vel = vec3(agl::randomUnitVector())* 100.0f;
-  currentPosition += currentPosition + vel * dt();
+  currentPosition = currentPosition + vel * dt();
   }
 
 
@@ -33,9 +33,9 @@ virtual void keyUp(int key, int mods){
     //reset position of object to (0,0,0)
     currentPosition = vec3(0,0,0);
     }
-    if (key == GLFW_KEY_SPACE){
-      update();
-    }
+  if (key == GLFW_KEY_SPACE) {
+      vel = vec3(agl::randomUnitVector()) * 100.0f;
+  }
   
  }
 
