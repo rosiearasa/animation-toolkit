@@ -20,6 +20,7 @@ class Eyes : public atkui::Framework
     double radius = 100;
     double s1X =x *0.7;
     double s2X = x * 1.5;
+
     drawSphere(vec3(s1X,y,-1000), radius);
     drawSphere(vec3(s2X,y,-1000), radius);
 

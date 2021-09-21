@@ -1,24 +1,106 @@
 #include "atkui/framework.h"
+#include <random>
+
+constexpr auto COUNT = 150;
 
 using namespace glm;
+using namespace std;
 
-class Unique : public atkui::Framework {
- public:
-  Unique() : atkui::Framework(atkui::Orthographic) {
-  }
+struct  Particle {
+	vec3 position;
+	vec3 color;
+	vec3 velocity;
 
-  virtual void setup() {
-    // your code here!
-  }
 
-  virtual void scene() {
-    // your code here!
-  }
+};
+
+class Unique : public atkui::Framework
+{
+
+
+
+
+public:
+	Unique() : atkui::Framework(atkui::Orthographic) {
+	}
+
+
+
+
+
+	virtual void setup() {
+		theta = 0.0;
+		thetaRate = 0.5;
+
+		//initializing the colors
+
+		vector <vec3> pallet = {
+		 vec3(0,165,227) / 255.0f,
+		 vec3(141,215,191) / 255.0f,
+		 vec3(255,150,197) / 255.0f,
+		 vec3(255,87,104) / 255.0f,
+		 vec3(255,162,58) / 255.0f
+
+		};
+
+
+
+
+
+
+	}
+
+
+
+
+
+	virtual void scene() {
+		Particle movingParticles[COUNT];
+		theta += thetaRate * elapsedTime();
+		vec3 position = agl::randomUnitVector();
+		//drawSphere(vec3(position[0], position[1], 0), 100);
+
+
+		//random colors
+		vector <vec3> pallet = {
+   vec3(0,165,227) / 255.0f,
+   vec3(141,215,191) / 255.0f,
+   vec3(255,150,197) / 255.0f,
+   vec3(255,87,104) / 255.0f,
+   vec3(255,162,58) / 255.0f
+
+		};
+
+		for (int i = 0; i < 1000; i++) {
+			//INITIALIZE RANDOM VELOCITY
+			movingParticles->velocity = vec3(agl::randomUnitVector()) * vec3(agl::randomUnitVector());
+
+
+			//CHOOSE AND SET A RANDOM COLOR  FROM GIVEN PALLET
+
+			int randColor = rand() % pallet.size();
+			vec3 value = pallet[randColor];
+			setColor(movingParticles->color = value);
+
+			//GENERATE RANDOM POSITION
+			drawSphere(movingParticles->position = vec3(agl::randomUnitVector()) * theta + vec3(0.5 * width()), 10);
+
+		}
+
+
+
+
+	}
+
+
+private:
+	float theta;
+	float thetaRate;
+
 };
 
 int main(int argc, char** argv) {
-  Unique viewer;
-  viewer.run();
-  return 0;
+	Unique viewer;
+	viewer.run();
+	return 0;
 }
-
