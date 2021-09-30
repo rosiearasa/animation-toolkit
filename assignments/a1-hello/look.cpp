@@ -17,13 +17,13 @@ public:
 
         //gett the postion of the mouse in terms of x and y
     
-        _mouseX = width() * 0.5;
-        _mouseY = height() * 0.5;
+    
       
 
     }
     virtual void scene() {
-       
+    double  _mouseX = width() * 0.5;
+       double _mouseY = height() * 0.5;
 
         setColor(vec3(1, 1, 1));
         double x = width() * 0.5;
@@ -66,8 +66,8 @@ public:
 
         //update the position of the left eye relative to the target
        // setColor(vec3(0, 0, 1));
-        double centerLeft = updateSmall(xpop,ypop);
-        double centerRight = updateSmall(xpop, ypop);
+        double centerLefts = updateSmall(xpop,ypop);
+        double centerRights = updateSmall(xpop, ypop);
 
         //update the position of the right eye relative to the target
    
@@ -101,17 +101,15 @@ public:
 
     }
     virtual void mouseMotion(int x, int y, int dx, int dy) {
-        _mouseX = x;
-        _mouseY = height() - y;
+       double  _mouseX = x;
+       double  _mouseY = height() - y;
     }
 
 
-private:
 
-    int _mouseX;
-    int _mouseY;
 
-    float theta;
+
+  
 
 
 };
