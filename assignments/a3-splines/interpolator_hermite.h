@@ -22,6 +22,7 @@ public:
 
     virtual void computeControlPoints(const std::vector<glm::vec3>& keys) {
        // todo: your code here
+       
     }
 
     void setClamped(bool c) { mIsClamped = c; }

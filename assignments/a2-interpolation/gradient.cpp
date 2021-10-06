@@ -19,20 +19,10 @@ class Bezier{
 
 };
 
-
-
  class Gradient : public atkui::Framework {
   public:
    Gradient() : atkui::Framework(atkui::Orthographic) {
    }
-
-        
-
-
-    
-
-   
-
 
    virtual void setup(){
      x = width();
@@ -40,8 +30,8 @@ class Bezier{
 
      N = 50;
 
-     rows = y/N+1;
-     cols = x/N+1;
+     rows = y/N;
+     cols = x/N;
 
      //initialize the values for the cube on the screen and the colors on each of the corners
      colorNE = vec3(1,1,0);
@@ -49,29 +39,20 @@ class Bezier{
      colorSE = vec3(1,0,0);
      colorSW = vec3(1,0,1);
 
-
    }
 
    virtual void scene() {
 
 
      for(int i=0;i<rows;i++){
-      int posY=(i)*N;
+      
       for(int j=0;j<cols;j++){
-        //first round interpolation
-        float tX=((float)(j*N)/(float)x);
-        vec3 Cx0= colorNW*(1-tX)+colorNE*tX;
-        vec3 Cx1=colorSW*(1-tX)+colorSE*tX;
-        //second round interpolation
-       
-        float tY=((float)(i*N)/(float)y);
-        
-        vec3 C=Cx1*(1-tY)+Cx0*tY;
         
         
-        setColor(C);
-        drawCube(vec3(j*N, posY, 0),vec3(N, N, 0) );
-        //drawSphere(vec3(j*N, posY, 0), 4);
+        
+        //setColor();
+        //drawCube();
+        
 
       }
      }

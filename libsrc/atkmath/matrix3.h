@@ -97,6 +97,7 @@ private:
          double m32;
          double m33;
       };
+      
      double mM[3][3];
    };
 };
