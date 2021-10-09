@@ -39,6 +39,7 @@ namespace atkmath
          z = atan2(-mM[0][1], mM[0][0]);
          x = atan2(-mM[1][2], mM[2][2]);
       }
+
       if (mM[0][2] == 1)
       {
          z = 0;
@@ -50,7 +51,7 @@ namespace atkmath
          x = atan2(mM[2][1], mM[2][0]);
       }
 
-      Vector3(x, y, z);
+     return Vector3(x, y, z);
    }
 
    Vector3 Matrix3::toEulerAnglesXZY() const
@@ -123,7 +124,6 @@ namespace atkmath
 
       return Vector3(x, y, z);
 
-      // return Vector3(x, y, z);
    }
 
    Vector3 Matrix3::toEulerAnglesZXY() const
@@ -145,7 +145,7 @@ namespace atkmath
 
       return Vector3(x, y, z);
 
-      // return Vector3(x, y, z);
+   
    }
 
    Vector3 Matrix3::toEulerAnglesZYX() const
