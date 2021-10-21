@@ -42,22 +42,12 @@ class Bezier{
    }
 
    virtual void scene() {
-
-
      for(int i=0;i<rows;i++){
-      
-      for(int j=0;j<cols;j++){
-        
-        
-        
+      for(int j=0;j<cols;j++){  
         //setColor();
         //drawCube();
-        
-
       }
      }
-
-
 
    }
 

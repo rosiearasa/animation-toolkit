@@ -30,7 +30,7 @@ public:
 
 	virtual void setup() {
 		theta = 0.0;
-		thetaRate = 0.5;
+		thetaRate = 0.001;
 
 
 
@@ -45,9 +45,9 @@ public:
 
 	virtual void scene() {
 		Particle movingParticles[COUNT];
-		theta += thetaRate * elapsedTime();
+		
 		vec3 position = agl::randomUnitVector();
-		//drawSphere(vec3(position[0], position[1], 0), 100);
+	
 
 
 		//random colors
@@ -59,34 +59,22 @@ public:
    vec3(255,162,58) / 255.0f
 
 		};
-
 		for (int i = 0; i < 1000; i++) {
+			movingParticles->position =  vec3(agl::randomUnitVector());
+			theta += thetaRate * elapsedTime();
 			//INITIALIZE RANDOM VELOCITY
-			movingParticles->velocity = vec3(agl::randomUnitVector()) * vec3(agl::randomUnitVector());
-
-
+			movingParticles->velocity = vec3(agl::randomUnitVector())*theta;
 			//CHOOSE AND SET A RANDOM COLOR  FROM GIVEN PALLET
-
 			int randColor = rand() % pallet.size();
 			vec3 value = pallet[randColor];
 			setColor(movingParticles->color = value);
-
-			//GENERATE RANDOM POSITION
-			drawSphere(movingParticles->position = vec3(agl::randomUnitVector()) * theta, 10);
-
-
-
-
+			//GENERATE RANDOM POSITION    
+				drawSphere((movingParticles->position*theta), 10);
 
 
 		}
-
-
-
-
-
-
-
+		
+			
 	}
 
 

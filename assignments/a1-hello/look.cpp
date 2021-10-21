@@ -38,15 +38,21 @@ public:
         drawSphere(vec3(s1X, y, -1000), radius);//right sphere
         drawSphere(vec3(s2X, y, -1000), radius);//left sphere
 
-        /*draw pupil*/
-        setColor(vec3(0,0,0));
-        drawSphere(vec3(s1X,y, 0 ), 40);
-        drawSphere(vec3(s2X,y, 0 ), 40);
-
 
         //rotation computations for left and right eyes
+       float angle1= atan2(_mouseY, _mouseX);
+       float angle2 = atan2(_mouseY, _mouseX);
 
-        
+       setColor(vec3(0,1,0));
+       vec3 spherepos = vec3(s1X*cos(angle1), s1X*sin(angle1)+y, 0);
+ 
+       vec3 spherepos2 = vec3(s2X*cos(angle2), s2X*sin(angle2)+y, 0);
+
+
+       
+       drawSphere(spherepos, 10);
+       drawSphere(spherepos2, 10);
+   
 
     }
 
