@@ -1,6 +1,7 @@
 #include "atkmath/quaternion.h"
 #include "atkmath/matrix3.h"
 #include "atkmath/vector3.h"
+#include <algorithm>
 
 namespace atkmath {
 
@@ -47,9 +48,83 @@ Matrix3 Quaternion::toMatrix () const
 	return XYZ;
 }
 
+
 void Quaternion::fromMatrix(const Matrix3& rot)
+
+
 {
-	// TODO
+	
+
+	//diagonal terms to solve vx2, vy2, vz2, w2
+
+	float Vx2, Vy2, Vz2, w2;
+    float x, y, z, w;
+
+	w2 = 0.25f*(rot.m11+ rot.m22 +rot.m33 +1);
+	Vx2  = 0.25f*(1+rot.m11-  rot.m22 - rot.m33);
+	Vy2   = 0.25f*(1-rot.m11+ rot.m22 -rot.m33);
+	Vz2   = 0.25f*(1- rot.m11 - rot.m22 + rot.m33);
+    
+	//get largest
+	std::vector<float> Vxyzw {Vx2, Vy2, Vz2, Vz2, w2};
+
+	float maxV = *std::max_element(Vxyzw.begin(),Vxyzw.end() );
+
+		
+	
+	if (maxV == Vx2){
+		x = sqrt(std::abs(Vx2));
+
+		w = (0.25f*(rot.m32 -rot.m23))/x;
+		y = (0.25f*(rot.m21 + rot.m12))/x;
+		z = (0.25f*(rot.m13 + rot.m31))/x;
+
+
+
+	}
+	else if (maxV == Vy2){
+		y = sqrt(std::abs(Vy2));
+
+		w =(0.25f*(rot.m13 -rot.m31))/ y;
+
+		x = (0.25f*(rot.m12 + rot.m21))/ y;
+		z = (0.25f*(rot.m23 + rot.m32))/ y;
+		
+		
+	}
+	else if (maxV == Vz2){
+		z = sqrt(std::abs(Vz2));
+
+		w = (0.25f*(rot.m21- rot.m31))/z;
+		x  =  (0.25f*(rot.m13+rot.m21))/z;
+		y =  (0.25f*(rot.m23 +rot.m32))/z;
+
+
+		
+	}
+	else if (maxV == w2){
+		w = sqrt(std::abs(w2));
+
+		Vx2 =(0.25f *(rot.m32 - rot.m23))/w;
+		Vy2 = (0.25f *(rot.m13 - rot.m31))/w;
+		Vz2 = (0.25f* (rot.m21 - rot.m12))/w;
+
+		
+	}
+
+
+mX =x;
+mY =y;
+mZ = z;
+mW= w;
+normalize();
+
+
+
+
+
+
+
 }
 
 }
