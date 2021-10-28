@@ -1,73 +1,67 @@
 #include <iostream>
- #include "atkui/framework.h"
- using namespace glm;
+#include "atkui/framework.h"
+using namespace glm;
 
-//a struct to hold the cube
-struct Cube{
-  vec3 cubePosition;
-  vec3 cubeColor;
-  int cubeSize;
-};
+class Gradient : public atkui::Framework
+{
+public:
+  Gradient() : atkui::Framework(atkui::Orthographic)
+  {
+  }
 
-template <typename Cube> 
-class Bezier{
-  public:
-  Cube P1;
-  Cube C1;
-  Cube P2;
-  Cube C2;
+  virtual void setup()
+  {
 
-};
+    N = 20;
 
- class Gradient : public atkui::Framework {
-  public:
-   Gradient() : atkui::Framework(atkui::Orthographic) {
-   }
+    //initialize the values for the cube on the screen and the colors on each of the corners
+    colorNW = vec3(1, 1, 0);
+    colorNE = vec3(0, 1, 1);
+    colorSW = vec3(1, 0, 0);
+    colorSE = vec3(1, 0, 1);
 
-   virtual void setup(){
-     x = width();
-     y = height();
+    px = 0;
+    py = 0;
+  }
 
-     N = 50;
+  virtual void scene()
+  {
+    for (int j = 0; j < height() / N + 1; j++)
+    {
+      py = j * N;
+      for (int i = 0; i < width() / N + 1; i++)
+      {
+        px = i * N;
+        float tx = px / width();
+        c0x = colorNW * (1 - tx) + colorNE * tx;
+        c1x = colorSW * (1 - tx) + colorSE * tx;
 
-     rows = y/N;
-     cols = x/N;
+        float ty = py / height();
 
-     //initialize the values for the cube on the screen and the colors on each of the corners
-     colorNE = vec3(1,1,0);
-     colorNW = vec3(0,1,1);
-     colorSE = vec3(1,0,0);
-     colorSW = vec3(1,0,1);
-
-   }
-
-   virtual void scene() {
-     for(int i=0;i<rows;i++){
-      for(int j=0;j<cols;j++){  
-        //setColor();
-        //drawCube();
+        c = c0x * (1 - ty) + c1x * ty;
+        setColor(c);
+        drawCube(vec3(px, py, 0), vec3(N, N, 0));
       }
-     }
+    }
+  }
 
-   }
+private:
+  int N;
+  float px;
+  float py;
+  vec3 c0x;
+  vec3 c1x;
+  vec3 c;
 
-   int N, x, y;
+  //initialize the variables for the colors
+  vec3 colorNW;
+  vec3 colorNE;
+  vec3 colorSW;
+  vec3 colorSE;
+};
 
-   int rows;
-   int cols;
-
-
-   //nitialize the variables for the colors
-   vec3 colorNW;
-   vec3 colorNE;
-   vec3 colorSW;
-   vec3 colorSE;
-
-
-
- };
-
- int main(int argc, char **argv) {
-   Gradient viewer;
-   viewer.run();
- }
+int main(int argc, char **argv)
+{
+  Gradient viewer;
+  viewer.run();
+}

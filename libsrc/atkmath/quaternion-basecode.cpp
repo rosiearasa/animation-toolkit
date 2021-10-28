@@ -25,7 +25,7 @@ void Quaternion::fromAxisAngle (const Vector3& axis, double angleRad)
 Vector3 XYZ = 	axis* sin(angleRad/2.0f);
 double W = cos(angleRad/2.0f);
 Quaternion(XYZ[0], XYZ[1], XYZ[2],W);
-// normalize();
+
 }
 
 Matrix3 Quaternion::toMatrix () const
@@ -49,8 +49,11 @@ Matrix3 Quaternion::toMatrix () const
 }
 
 
-void Quaternion::fromMatrix(const Matrix3& rot)
 
+
+
+
+void Quaternion::fromMatrix(const Matrix3& rot)
 
 {
 	
@@ -58,73 +61,68 @@ void Quaternion::fromMatrix(const Matrix3& rot)
 	//diagonal terms to solve vx2, vy2, vz2, w2
 
 	float Vx2, Vy2, Vz2, w2;
-    float x, y, z, w;
+    float x;
+	float y;
+	float z;
+	float w;
 
-	w2 = 0.25f*(rot.m11+ rot.m22 +rot.m33 +1);
-	Vx2  = 0.25f*(1+rot.m11-  rot.m22 - rot.m33);
-	Vy2   = 0.25f*(1-rot.m11+ rot.m22 -rot.m33);
-	Vz2   = 0.25f*(1- rot.m11 - rot.m22 + rot.m33);
+	w2 = 0.25f*(rot[1][1]+ rot[2][2] +rot[3][3] +1);
+	Vx2  = 0.25f*(1+rot[1][1]- rot[2][2] - rot[3][3]);
+	Vy2   = 0.25f*(1-rot[1][1]+ rot[2][2]-rot[3][3]);
+	Vz2   = 0.25f*(1- rot[1][1] - rot[2][2] + rot[3][3]);
     
 	//get largest
-	std::vector<float> Vxyzw {Vx2, Vy2, Vz2, Vz2, w2};
+	std::vector<float> Vxyzw {Vx2, Vy2, Vz2, w2};
 
 	float maxV = *std::max_element(Vxyzw.begin(),Vxyzw.end() );
 
 		
+	if (maxV >= w2){
+		w = sqrt(w2);
+
+		x =((rot[3][2]- rot[2][3])/4)/w;
+		y = ((rot[1][3] - rot[3][1])/4)/w;
+		z= ( (rot[2][1] - rot[1][2])/4)/w;
+
+		
+	}
+	else if (maxV >= Vx2){
+		x = sqrt(Vx2);
+
+		w = ((rot[3][2] -rot[2][3])/4)/x;
+		y = ((rot[2][1] + rot[1][2])/4)/x;
+		z = ((rot[1][3] + rot[3][1])/4)/x;
+
+
+
+	}
+	else if (maxV >= Vy2){
+		y = sqrt(Vy2);
+
+		w =((rot[1][3] -rot[3][1])/4)/ y;
+
+		x = ((rot[1][2] + rot[2][1])/4)/ y;
+		z = ((rot[2][3] + rot[3][2])/4)/ y;
+		
+		
+	}
+	else if (maxV >= Vz2){
+		z = sqrt(Vz2);
+
+		w = ((rot[2][1]- rot[1][2])/4)/z;
+		x  =  ((rot[1][3]+rot[3][1])/4)/z;
+		y =  ((rot[2][3] +rot[3][2])/4)/z;
+
+
+		
+	}
 	
-	if (maxV == Vx2){
-		x = sqrt(std::abs(Vx2));
-
-		w = (0.25f*(rot.m32 -rot.m23))/x;
-		y = (0.25f*(rot.m21 + rot.m12))/x;
-		z = (0.25f*(rot.m13 + rot.m31))/x;
-
-
-
-	}
-	else if (maxV == Vy2){
-		y = sqrt(std::abs(Vy2));
-
-		w =(0.25f*(rot.m13 -rot.m31))/ y;
-
-		x = (0.25f*(rot.m12 + rot.m21))/ y;
-		z = (0.25f*(rot.m23 + rot.m32))/ y;
-		
-		
-	}
-	else if (maxV == Vz2){
-		z = sqrt(std::abs(Vz2));
-
-		w = (0.25f*(rot.m21- rot.m31))/z;
-		x  =  (0.25f*(rot.m13+rot.m21))/z;
-		y =  (0.25f*(rot.m23 +rot.m32))/z;
-
-
-		
-	}
-	else if (maxV == w2){
-		w = sqrt(std::abs(w2));
-
-		Vx2 =(0.25f *(rot.m32 - rot.m23))/w;
-		Vy2 = (0.25f *(rot.m13 - rot.m31))/w;
-		Vz2 = (0.25f* (rot.m21 - rot.m12))/w;
-
-		
-	}
-
-
+	
 mX =x;
 mY =y;
-mZ = z;
+mZ =z;
 mW= w;
 normalize();
-
-
-
-
-
-
-
 }
 
 }
