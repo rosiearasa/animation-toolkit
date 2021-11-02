@@ -2,29 +2,49 @@
 #include "atkmath/matrix3.h"
 #include "atkmath/vector3.h"
 #include <algorithm>
+#include<math.h>
 
 namespace atkmath {
 
 Quaternion Quaternion::Slerp(const Quaternion& q0, const Quaternion& q1, double t)
 {
-	// TODO
-	return Quaternion(1,0,0,0);
+	Quaternion q;
+	double omega = Dot(q0, q1);
+	double angle = acos(omega);
+
+
+//check for naan and division by 0
+
+if(omega<0){
+	omega = -(Dot(q0, q1));
+	Quaternion q2 = -q1;
+		q = (sin(angle*(1.0-t)))/(sin(angle))* q0 + (sin(angle*t)/sin(angle))*q2;
+}
+else{
+		q = (sin(angle*(1.0-t)))/(sin(angle))* q0 + (sin(angle*t)/sin(angle))*q1;
+
+}
+
+	q.normalize();
+	return q;
 }
 
 void Quaternion::toAxisAngle (Vector3& axis, double& angleRad) const
 {
-angleRad = acos(this->mW)*2;
-axis = Vector3(this->mX, this->mY, this->mZ)* sin(angleRad/2.0f);
-
-
+angleRad = acos(mW)*2;
+axis = Vector3(mX,mY,mZ)* (1.0/sin(angleRad/2.0));
 
 }
 
 void Quaternion::fromAxisAngle (const Vector3& axis, double angleRad)
 {
-Vector3 XYZ = 	axis* sin(angleRad/2.0f);
-double W = cos(angleRad/2.0f);
-Quaternion(XYZ[0], XYZ[1], XYZ[2],W);
+Vector3 XYZ = 	axis* sin(angleRad/2.0);
+double W = cos(angleRad/2.0);
+mW = 	W;
+mX = XYZ[0];
+mY = XYZ[1];
+mZ = XYZ[2];
+normalize();
 
 }
 
@@ -49,80 +69,21 @@ Matrix3 Quaternion::toMatrix () const
 }
 
 
-
-
-
-
 void Quaternion::fromMatrix(const Matrix3& rot)
 
 {
 	
-
-	//diagonal terms to solve vx2, vy2, vz2, w2
-
-	float Vx2, Vy2, Vz2, w2;
-    float x;
-	float y;
-	float z;
-	float w;
-
-	w2 = 0.25f*(rot[1][1]+ rot[2][2] +rot[3][3] +1);
-	Vx2  = 0.25f*(1+rot[1][1]- rot[2][2] - rot[3][3]);
-	Vy2   = 0.25f*(1-rot[1][1]+ rot[2][2]-rot[3][3]);
-	Vz2   = 0.25f*(1- rot[1][1] - rot[2][2] + rot[3][3]);
-    
-	//get largest
-	std::vector<float> Vxyzw {Vx2, Vy2, Vz2, w2};
-
-	float maxV = *std::max_element(Vxyzw.begin(),Vxyzw.end() );
-
-		
-	if (maxV >= w2){
-		w = sqrt(w2);
-
-		x =((rot[3][2]- rot[2][3])/4)/w;
-		y = ((rot[1][3] - rot[3][1])/4)/w;
-		z= ( (rot[2][1] - rot[1][2])/4)/w;
-
-		
-	}
-	else if (maxV >= Vx2){
-		x = sqrt(Vx2);
-
-		w = ((rot[3][2] -rot[2][3])/4)/x;
-		y = ((rot[2][1] + rot[1][2])/4)/x;
-		z = ((rot[1][3] + rot[3][1])/4)/x;
-
-
-
-	}
-	else if (maxV >= Vy2){
-		y = sqrt(Vy2);
-
-		w =((rot[1][3] -rot[3][1])/4)/ y;
-
-		x = ((rot[1][2] + rot[2][1])/4)/ y;
-		z = ((rot[2][3] + rot[3][2])/4)/ y;
-		
-		
-	}
-	else if (maxV >= Vz2){
-		z = sqrt(Vz2);
-
-		w = ((rot[2][1]- rot[1][2])/4)/z;
-		x  =  ((rot[1][3]+rot[3][1])/4)/z;
-		y =  ((rot[2][3] +rot[3][2])/4)/z;
-
-
-		
-	}
+	Vector3 axis = Vector3();
+	double angle = 0.0;
 	
-	
-mX =x;
-mY =y;
-mZ =z;
-mW= w;
-normalize();
+	rot.toAxisAngle(axis, angle);
+
+	mX=axis.x();
+	mY=axis.y();
+	mZ=axis.z();
+	mW=angle;
+
+	normalize();
 }
 
 }

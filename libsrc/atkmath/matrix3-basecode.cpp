@@ -1,5 +1,9 @@
 #include "atkmath/matrix3.h"
 #include "atkmath/quaternion.h"
+#include <algorithm>
+#include <math.h>
+
+
 
 namespace atkmath
 {
@@ -270,13 +274,80 @@ namespace atkmath
 
    void Matrix3::toAxisAngle(Vector3 &axis, double &angleRad) const
    {
-      // TODO
+      //diagonal terms to solve vx2, vy2, vz2, w2
+
+   Quaternion q;
+
+
+    double x=0.0;
+	double y=0.0;
+	double z=0.0;
+	double w=0.0;
+
+	double w2 = 0.25*(this->m11+ this->m22 +this->m33 +1);
+	double Vx2  = 0.25*(1+this->m11- this->m22 - this->m33);
+	double Vy2   = 0.25*(1-this->m11+ this->m22-this->m33);
+	double Vz2   = 0.25*(1- this->m11 - this->m22 + this->m33);
+    
+	//get largest
+	std::vector<double> Vxyzw {Vx2, Vy2, Vz2, w2};
+
+	double maxV = *std::max_element(Vxyzw.begin(),Vxyzw.end() );
+
+
+
+		
+	if (maxV == w2){
+		w = sqrt(w2);
+
+		x =((this->m32- this->m23)/4)/w;
+		y = ((this->m13 - this->m31)/4)/w;
+		z= ( (this->m21 - this->m12)/4)/w;
+
+		
+	}
+	else if (maxV == Vx2){
+		x = sqrt(Vx2);
+
+		w = ((this->m32 -this->m23)/4)/x;
+		y = ((this->m21 + this->m12)/4)/x;
+		z = ((this->m13 + this->m31)/4)/x;
+
+
+
+	}
+	else if (maxV == Vy2){
+		y = sqrt(Vy2);
+
+		w =((this->m13 -this->m31)/4)/ y;
+
+		x = ((this->m12 + this->m21)/4)/ y;
+		z = ((this->m23 + this->m32)/4)/ y;
+		
+		
+	}
+	else if (maxV == Vz2){
+		z = sqrt(Vz2);
+
+		w = ((this->m21- this->m12)/4)/z;
+		x  =  ((this->m13+this->m31)/4)/z;
+		y =  ((this->m23 +this->m32)/4)/z;
+	}
+
+   q= Quaternion(x, y, z, w);
+   q.normalize();
+   axis = Vector3(q.x(), q.y(), q.z());
+   angleRad= q.w();
+
    }
 
    void Matrix3::fromAxisAngle(const Vector3 &axis, double angleRad)
    {
-      // TODO
-      *this = Identity;
+     Quaternion q= Quaternion();
+
+     q.fromAxisAngle(axis, angleRad);
+     q.normalize();
+     *this = q.toMatrix();
    }
 
 }
