@@ -32,7 +32,14 @@ else{
 void Quaternion::toAxisAngle (Vector3& axis, double& angleRad) const
 {
 angleRad = acos(mW)*2;
+
+if (angleRad == 0){
+	axis = Vector3 (1,0,0);
+}
+else{
 axis = Vector3(mX,mY,mZ)* (1.0/sin(angleRad/2.0));
+
+}
 
 }
 
@@ -62,7 +69,7 @@ Matrix3 Quaternion::toMatrix () const
 
 		2*(X*Y + W *Z), 1-2*(pow(X, 2)+pow(Z, 2)), 2*(Y*Z - W*X),
 
-		2*(X*Z - W*Y), 2*(Y* Z + W), 1-2*(pow(Y, 2)+ pow(X, 2)));
+		2*(X*Z - W*Y), 2*(Y* Z + W*X), 1-2*(pow(Y, 2)+ pow(X, 2)));
 
 	
 	return XYZ;
