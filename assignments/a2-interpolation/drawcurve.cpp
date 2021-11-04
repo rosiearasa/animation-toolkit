@@ -38,22 +38,31 @@ public:
         drawLine(BX, points);
         BX = points;
       }
+      BX = B0;
     }
 
+    else if (keypressed == 2)
+    {
 
-    if (keypressed == 2){
+      //draw casteljau
+      for (float t = 0.0f; t <= 1.0; t += 0.01)
+      {
 
-//draw catmullron
+        vec3 b01 = B0 * (1 - t) + B1 * t;
+        vec3 b11 = B1 * (1 - t) + B2 * t;
+        vec3 b21 = B2 * (1 - t) + B3 * t;
 
-//segment 1
-//segment 2
+        vec3 b02 = b01 * (1 - t) + b11 * t;
+        vec3 b12 = b11 * (1 - t) + b21 * t;
 
-
-      
+        vec3 b03 = b02 * (1 - t) + b12 * t;
+        vec3 B = b03;
+        setColor(vec3(1, 0, 1));
+        drawLine(BX, B);
+        BX = B;
+      }
+      BX = B0;
     }
-
-
-    BX = B0;
   }
 
   void keyUp(int key, int mod)
@@ -66,8 +75,6 @@ public:
     else if (key == GLFW_KEY_2)
     {
       keypressed = 2;
-
-
     }
   }
   //control points
