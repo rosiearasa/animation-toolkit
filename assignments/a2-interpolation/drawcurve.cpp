@@ -43,10 +43,16 @@ public:
 
     if (keypressed == 2){
 
+//draw catmullron
+
+//segment 1
+//segment 2
 
 
       
     }
+
+
     BX = B0;
   }
 

@@ -24,8 +24,8 @@ class Eyes : public atkui::Framework
     drawSphere(vec3(s1X,y,-1000), radius);
     drawSphere(vec3(s2X,y,-1000), radius);
 
-    smallSphere(s1X ,radius/3);
-    smallSphere(s2X ,radius/3);
+    smallSphere(s1X ,radius*0.3);
+    smallSphere(s2X ,radius*0.3);
 
 
 
