@@ -5,9 +5,6 @@
 #include "agl/renderer.h"
 #include "devil.h"
 
-#define HI 1.25f
-#define LO 0.75f
-
 using namespace atk;
 using namespace glm;
 

@@ -21,6 +21,11 @@ public:
       lwing->setLocalTranslation(vec3(0.1,0,0)*100.0f);
       skeleton.addJoint(lwing, body);
 
+      Joint* llwing = new Joint("llwing");
+      llwing->setLocalTranslation(vec3(0, 0.1,0)*50.0f);
+      skeleton.addJoint(llwing, lwing);
+
+
       Joint* rwing = new Joint("RWing");
       rwing->setLocalTranslation(vec3(-0.1,0,0)*100.0f);
       skeleton.addJoint(rwing, body);
@@ -31,7 +36,9 @@ public:
    void scene() {
       Joint* body = skeleton.getByName("Body");
       Joint* lwing = skeleton.getByName("LWing");
+      Joint* llwing = skeleton.getByName("llwing");
       lwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()), vec3(0,0,1)));
+      llwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()/2.0F), vec3(0,0,1)));
 
       Joint* rwing = skeleton.getByName("RWing");
       rwing->setLocalRotation(glm::angleAxis(-sin(elapsedTime()), vec3(0,0,1))); 
@@ -40,6 +47,7 @@ public:
       // attach geometry to skeleton 
       Transform B = body->getLocal2Global(); 
       Transform LT = lwing->getLocal2Global(); 
+      Transform LLT = llwing->getLocal2Global(); 
       Transform RT = rwing->getLocal2Global(); 
 
       // draw body
@@ -57,6 +65,12 @@ public:
          vec3(80,0,0), 
          vec3(120,20,200));
 
+      Transform llwingGeometry(
+         eulerAngleRO(XYZ, vec3(0,0,0)),
+         vec3(-80,0,0),
+         vec3(100,20,100)
+      );
+
       setColor(vec3(0.4, 0.4, 0.8));
       push();
       transform(B * bodyGeometry);
@@ -68,6 +82,13 @@ public:
       transform(LT * lwingGeometry);
       drawSphere(vec3(0), 1);
       pop();
+      
+      setColor(vec3(0.3,0,0.0));
+      push();
+      transform(LLT* lwingGeometry);
+      drawSphere(vec3(0),1);
+      pop();
+
 
       setColor(vec3(0, 0.8, 0.0));
       push();
