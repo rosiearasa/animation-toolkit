@@ -1,74 +1,74 @@
 #include "atkui/framework.h"
-#include <vector>
+
 
 using namespace glm;
-using namespace std;
 
 struct Particle
 {
-   vec3 position;
-   vec3 color;
-   vec3 velocity;
+	vec3 position;
+	vec3 color;
+	vec3 velocity;
 };
 
 class Circles : public atkui::Framework
 {
-
 public:
-   Circles() : atkui::Framework(atkui::Orthographic)
-   {
+   Circles() : atkui::Framework(atkui::Orthographic) {
    }
 
-   virtual void setup()
-   {
-      radius = 10;
-      xPos = width() * 0.5;
-      yPos = height() * 0.5;
-      thetha = 0.0;
-      thetaRate = 0.2;
+   virtual void setup() {
+      theta = 0.0f;
+      thetarate=1.0;
+      displacement = 2.0;
+      radius = 5;
+
+
    }
 
-   virtual void scene()
-   {
-      vector<Particle> particles;
+   virtual void scene() {
+ 
+      for (int i =0; i<36; i+=2){
+         theta += thetarate;
 
-      //random colors
-      vector<vec3> pallet = {
-          vec3(0, 165, 227) / 255.0f,
-          vec3(141, 215, 191) / 255.0f,
-          vec3(255, 150, 197) / 255.0f,
-          vec3(255, 87, 104) / 255.0f,
-          vec3(255, 162, 58) / 255.0f,
-
-      };
-
-      N = 10;
-          thetha +=elapsedTime();
-    
-       for (int i = 0; i<=100; i++){
-         xPos = cos(thetha) + width() * 0.5;
-         yPos = sin(thetha) + height() * 0.5;
-         setColor(vec3(1, 0, 1));
-
-         drawSphere(vec3(xPos, yPos, 0), N);
-         drawSphere(vec3(xPos+10, yPos+10, 0), N);
+         hypnotic[i].position =vec3(radius+i*2*cos(theta)+width()*0.5, radius+i*2*sin(theta)+height()*0.5, 0);
+      // if (hypnotic[i].position.x <= width() && hypnotic[i].position.y <= height())
+		// 	{
+				//CHOOSE AND SET A RANDOM COLOR  FROM GIVEN PALLET
+				int randColor = rand() % pallet.size();
+				vec3 value = pallet[randColor];
+				setColor(hypnotic[i].color = value);
+				//GENERATE RANDOM POSITION
+   drawSphere(hypnotic[i].position, 10);
+			
+		//	}
       
-       }
-        
+	
 
-      //update the x and y positions
    }
+   }
+   private:
+   float theta;
+   float thetarate;
+   double displacement;
+   float radius;
 
-private:
-   float xPos, yPos;
-   float thetha;
-   int radius;
-   float thetaRate;
+   std::vector<Particle> PPP;
+	Particle hypnotic[36];
+   std::vector<vec3> pallet =
+   {
+      vec3(0,165,227)/255.0f,
+      vec3(141,215,191)/255.0f,
+      vec3(255,150,197)/255.0f,
+      vec3(255,87,104)/255.0f,
+      vec3(255,162,58)/255.0f
+   };
 
-   int N; //number of circles
+
+
 };
 
-int main(int argc, char **argv)
+
+int main(int argc, char** argv)
 {
    Circles viewer;
    viewer.run();

@@ -26,13 +26,44 @@ public:
 
    Motion spliceUpperBody(const Motion& lower, const Motion& upper, float alpha)
    {
-      Motion result;
+     
+
+      Motion result=lower;
       result.setFramerate(lower.getFramerate());
-      // todo: your code here
-      result.appendKey(lower.getKey(0));
+   for (int i =0; i<result.getNumKeys(); i++){
+      Pose pose  = result.getKey(i);
+      
+      Pose upperbody = upper.getKey(i);
+
+      //Use glm::slerp to blend local rotations for the upper body
+     // for (int j = 0; j< _skeleton.getNumJoints(); j++){
+
+      //  if (isUpperBody(_skeleton.getByID(j)== true)
+      // {
+      //      Joint * jointsUpper = _skeleton.getByID(j);
+        
+      // }
+
+      // }
+
+      //compute new pose
+      result.editKey(i, pose);
+  }
+
       return result;
    }
+bool isUpperBody(Joint *joint){
 
+  for (Joint *currentJoint = joint; currentJoint!=NULL; currentJoint=currentJoint->getParent()){
+     if(currentJoint->getName()=="Beta:Spine1"){
+      return true;
+   }
+  }
+  
+      return false;
+   
+  
+}
    void scene()
    {  
       _splice.update(_skeleton, elapsedTime() * 0.5);

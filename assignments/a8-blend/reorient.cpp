@@ -28,15 +28,25 @@ public:
       _reoriented = reorient(_motion, _offset, _heading);
    }
 
-   Motion reorient(const Motion& motion, const vec3& pos, float heading)
+   Motion reorient(const Motion &motion, const vec3 &pos, float heading)
    {
       Motion result;
+      Pose pose;
       result.setFramerate(motion.getFramerate());
 
-      // todo: your code here
-      Pose pose = motion.getKey(0);
+      quat rotation = eulerAngleRO(XYZ, vec3(0, heading, 0));
+      for (int i = 0; i < motion.getNumKeys(); i++)
+      {
+         pose = motion.getKey(i);
+         pose.rootPos = (pose.rootPos + pos) * rotation;
+         for (int j = 0; j < _skeleton.getNumJoints(); j++)
+         {
+
+            pose.jointRots[j] = pose.jointRots[i] * rotation;
+         }
+      }
       result.appendKey(pose);
-      
+
       return result;
    }
 
@@ -47,23 +57,23 @@ public:
    }
 
    void scene()
-   {  
+   {
       update();
       SkeletonDrawer drawer;
       drawer.draw(_skeleton, *this);
    }
 
-   void keyUp(int key, int mods) 
+   void keyUp(int key, int mods)
    {
       if (key == GLFW_KEY_LEFT)
       {
-         _heading += M_PI/8;
+         _heading += M_PI / 8;
          _reoriented = reorient(_motion, _offset, _heading);
          _time = 0;
       }
       else if (key == GLFW_KEY_RIGHT)
       {
-         _heading -= M_PI/8;
+         _heading -= M_PI / 8;
          _reoriented = reorient(_motion, _offset, _heading);
          _time = 0;
       }
@@ -106,10 +116,9 @@ public:
    float _time;
 };
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
    AReorient viewer;
    viewer.run();
    return 0;
 }
-

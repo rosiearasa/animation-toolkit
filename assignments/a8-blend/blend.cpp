@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <string>
 
+
 using namespace atk;
 using namespace atkui;
 using namespace glm;
@@ -28,10 +29,19 @@ public:
    {
       Motion blend;
       blend.setFramerate(m1.getFramerate());
-
-      // todo: replace the following line with your code
-      blend.appendKey(m1.getKey(0)); // placeholder
-      return blend;
+      double deltaT = 1/blend.getFramerate();
+ 
+      double t1, t2 = 0.0;
+      double duration= m1.getDuration()*(1-_alpha)+m2.getDuration()*_alpha;
+      for (double t=0.0; t<=duration; t+=deltaT){
+        t1 = (t/duration)* m1.getDuration();
+        t2 = (t/duration)* m2.getDuration();
+        Pose pos1 = m1.getValue(t1);
+        Pose pos2 = m2.getValue(t2);
+        Pose newkey = Pose::Lerp(pos1,pos2, alpha);
+        blend.appendKey(newkey);
+      }
+     return blend;
    }
 
    void scene()
