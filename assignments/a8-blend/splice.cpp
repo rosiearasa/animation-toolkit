@@ -2,6 +2,7 @@
 #include "atkui/framework.h"
 #include "atkui/skeleton_drawer.h"
 #include <algorithm>
+#include <deque>
 #include <string>
 
 using namespace atk;
@@ -24,64 +25,61 @@ public:
       _splice = spliceUpperBody(_lower, _upper, _alpha);
    }
 
-   Motion spliceUpperBody(const Motion& lower, const Motion& upper, float alpha)
+   Motion spliceUpperBody(const Motion &lower, const Motion &upper, float alpha)
    {
-     
 
-      Motion result=lower;
+      Motion result;
       result.setFramerate(lower.getFramerate());
-   for (int i =0; i<result.getNumKeys(); i++){
-      Pose pose  = result.getKey(i);
-      
-      Pose upperbody = upper.getKey(i);
 
-      //Use glm::slerp to blend local rotations for the upper body
-     // for (int j = 0; j< _skeleton.getNumJoints(); j++){
+      Joint *isupper = _skeleton.getByName("Beta:Spine1");
 
-      //  if (isUpperBody(_skeleton.getByID(j)== true)
-      // {
-      //      Joint * jointsUpper = _skeleton.getByID(j);
-        
-      // }
+      std::deque<int> jointsqueue;
+      std::vector<int> iDs;
+      jointsqueue.push_back(isupper->getID());
+      while (!jointsqueue.empty())
+      {
+         isupper = _skeleton.getByID(jointsqueue.front());
+         jointsqueue.pop_front();
+         iDs.push_back(isupper->getID());
+         for (int i = 0; i < isupper->getNumChildren(); i++)
+         {
+            jointsqueue.push_back(isupper->getChildAt(i)->getID());
+         }
+      }
+      for (int i = 0; i < lower.getNumKeys(); i++)
+      {
+         Pose lowerPose = lower.getKey(i);
+         Pose upperPose = upper.getKey(120 + i);
 
-      // }
-
-      //compute new pose
-      result.editKey(i, pose);
-  }
+         for (int j = 0; j < iDs.size(); j++)
+         {
+            lowerPose.jointRots[iDs[j]] =
+                glm::slerp(upperPose.jointRots[iDs[j]], lowerPose.jointRots[iDs[j]], alpha);
+         }
+         result.appendKey(lowerPose);
+      }
 
       return result;
    }
-bool isUpperBody(Joint *joint){
 
-  for (Joint *currentJoint = joint; currentJoint!=NULL; currentJoint=currentJoint->getParent()){
-     if(currentJoint->getName()=="Beta:Spine1"){
-      return true;
-   }
-  }
-  
-      return false;
-   
-  
-}
    void scene()
-   {  
+   {
       _splice.update(_skeleton, elapsedTime() * 0.5);
       SkeletonDrawer drawer;
       drawer.draw(_skeleton, *this);
-      drawText("alpha: "+std::to_string(_alpha), 10, 15);
+      drawText("alpha: " + std::to_string(_alpha), 10, 15);
    }
 
-   void keyUp(int key, int mods) 
+   void keyUp(int key, int mods)
    {
       if (key == GLFW_KEY_UP)
       {
-         _alpha = std::min(_alpha+0.05, 1.0);
+         _alpha = std::min(_alpha + 0.05, 1.0);
          _splice = spliceUpperBody(_lower, _upper, _alpha);
       }
       else if (key == GLFW_KEY_DOWN)
       {
-         _alpha = std::max(_alpha-0.05, 0.0);
+         _alpha = std::max(_alpha - 0.05, 0.0);
          _splice = spliceUpperBody(_lower, _upper, _alpha);
       }
    }
@@ -93,10 +91,9 @@ bool isUpperBody(Joint *joint){
    float _alpha;
 };
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
    ASplice viewer;
    viewer.run();
    return 0;
 }
-

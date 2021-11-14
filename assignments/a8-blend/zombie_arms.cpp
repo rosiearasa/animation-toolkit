@@ -54,6 +54,8 @@ public:
       Motion result;
       result.setFramerate(motion.getFramerate());
       // todo: your code here
+
+      
       result.appendKey(motion.getKey(0));
 
       return result;
