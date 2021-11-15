@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 
+
 using namespace glm;
 using namespace std;
 using namespace atk;
@@ -44,9 +45,16 @@ public:
     _walk.update(_skeleton, elapsedTime());
 
     // TODO: Your code here
+    vec3 cameraPos = _skeleton.getRoot()->getGlobalTranslation();
+    vec3 cameraLook =_skeleton.getRoot()->getGlobalTranslation();
+    double l1, l2 = 0.0;
+    
+   //Transform theta = cameraPos- cameraLook;
+
+cout<< cameraLook<< endl;
 
     // TODO: Override the default camera to follow the character
-    // lookAt(pos, look, vec3(0, 1, 0));
+    //lookAt(pos, look, vec3(0, 1, 0));
 
     // update heading when key is down
     if (keyIsDown('D')) _heading -= 0.05;

@@ -17,7 +17,7 @@ public:
 
    void setup()
    {
-      _alpha = 0;
+      _alpha = 10;
 
       BVHReader reader;
       reader.load("../motions/Beta/walking.bvh", _skeleton, _lower);
