@@ -8,6 +8,10 @@
 ### draw cubic
 
 
+https://user-images.githubusercontent.com/43176564/141833482-6693fbe1-c439-45d6-adb4-5a190b91378f.mov
+
+
+
 ### cubic motion
 
 ### screen saver
