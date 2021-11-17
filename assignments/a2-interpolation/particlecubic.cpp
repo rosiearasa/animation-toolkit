@@ -26,7 +26,7 @@ public:
     {
 
       vec3 points = (float)(pow((1 - t), 3)) * B0 + (float)(3.0 * t * pow((1 - t), 2)) * B1 + (float)(3.0 * pow(t, 2) * (1 - t)) * B2 + (float)(pow(t, 3)) * B3;
-      //points2 = (float)(pow((1 - t), 3)) * B0*t + (float)(3.0 * t * pow((1 - t), 2)) * B1*t + (float)(3.0 * pow(t, 2) * (1 - t)) * B2*t + (float)(pow(t, 3)) * B3*t;
+     
       vec3 color = (vec3(1, 1, 0));
       setColor(color);
 

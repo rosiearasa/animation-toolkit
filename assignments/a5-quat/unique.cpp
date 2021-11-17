@@ -1,7 +1,69 @@
 #include "atkui/framework.h"
+#include "atkmath/quaternion.h"
+#include "atkmath/vector3.h"
+#include "atkmath/matrix3.h"
+
+using atkmath::Matrix3;
+using atkmath::Vector3;
+using glm::vec3;
+
 using namespace glm;
 
-int main(int argc, char** argv) {
-   return 0;
-}
+class Unique : public atkui::Framework
+{
+public:
+  Unique() : atkui::Framework(atkui::Orthographic)
+  {
+  }
 
+  virtual void setup()
+  {
+    theta = 0.0;
+    thetaRate = 0.05;
+    radius = 40;
+  }
+  virtual void scene()
+  {
+
+    for (double i = 1.0; i < 10.0; i++)
+    {
+      theta += thetaRate;
+
+      sphereX = width() * 0.5;
+      sphereY = height() * 0.5;
+      sphereX1 = width() * 0.05;
+      sphereY1 = height() * 0.05;
+      for (double j = 0.0; j < 10.0; j++)
+      {
+        theta += dt();
+        translate(vec3(sphereX, sphereY, 0));
+        rotate(acos(0.0), vec3(0, 0, 1));
+        rotate(theta * 0.00005, vec3(0, 0, 1));
+        setColor(vec3(1, 1, 0));
+        drawLine(vec3(sphereX / i, sphereY / i, 0), vec3(width() * 0.5, height() * 0.5, 0));
+
+        translate(vec3(sphereX1, sphereY1, 0));
+        rotate(acos(0.0), vec3(0, 0, 1));
+        rotate(theta * 0.00005, vec3(0, 0, 1));
+        setColor(vec3(0, 1, 0));
+        drawLine(vec3(sphereX1 / i, sphereY1 / i, 0), vec3(width() * 0.5, height() * 0.5, 0));
+      }
+    }
+  }
+
+private:
+  float thetaRate;
+  float radius;
+  float theta;
+  float sphereX;
+  float sphereY;
+  float sphereX1;
+  float sphereY1;
+};
+
+int main(int argc, char **argv)
+{
+  Unique viewer;
+  viewer.run();
+  return 0;
+}

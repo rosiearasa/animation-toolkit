@@ -11,6 +11,11 @@
 
    void scene() {
    }
+
+   private:
+  //  vec3 curve1;
+  //  vec3 curve2;
+
  };
 
 
