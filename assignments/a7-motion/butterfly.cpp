@@ -12,10 +12,21 @@ public:
    }
 
    void setup() {
+    
+
+
+
       Joint* body = new Joint("Body");
       body->setLocalTranslation(vec3(1,2,1)*100.0f);
       body->setLocalRotation(glm::angleAxis(glm::radians<float>(45.0f), vec3(0,1,0)));
       skeleton.addJoint(body);
+
+      //The head
+      Joint *head = new Joint ("head");
+      head->setLocalTranslation(vec3(0,0,0)*100.0f);
+      head->setLocalRotation(glm::angleAxis(glm::radians<float>(90.0f), vec3 (0,0,1)));
+      skeleton.addJoint(body, head);
+
 
       Joint* lwing = new Joint("LWing");
       lwing->setLocalTranslation(vec3(0.1,0,0)*100.0f);
@@ -34,11 +45,17 @@ public:
    }
 
    void scene() {
+      Joint *hhead = skeleton.getByName("head");
       Joint* body = skeleton.getByName("Body");
       Joint* lwing = skeleton.getByName("LWing");
+      
       Joint* llwing = skeleton.getByName("llwing");
-      lwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()), vec3(0,0,1)));
-      llwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()/2.0F), vec3(0,0,1)));
+      llwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()), vec3(0,0,1)));
+      llwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()), vec3(0,0,1)));
+ 
+      Joint *head = skeleton.getByName("head");
+
+
 
       Joint* rwing = skeleton.getByName("RWing");
       rwing->setLocalRotation(glm::angleAxis(-sin(elapsedTime()), vec3(0,0,1))); 
@@ -55,10 +72,17 @@ public:
          glm::angleAxis(glm::pi<float>()*0.5f, vec3(1,0,0)), // rotation
          vec3(0), vec3(25, 200, 25)); // position, scale
 
+      Transform headGeometry(
+         glm::angleAxis(glm::pi<float>()*0.5f, vec3(0,1,0)),
+         vec3(0), vec3(25, 200, 25)); // position, scale
+
+      
+
       Transform lwingGeometry(
          eulerAngleRO(XYZ, vec3(0,0,0)),
          vec3(-80,0,0), 
-         vec3(120,20,200));
+         vec3(120,20,200)
+         );
 
       Transform rwingGeometry(
          eulerAngleRO(XYZ, vec3(0,0,0)),
@@ -83,11 +107,11 @@ public:
       drawSphere(vec3(0), 1);
       pop();
       
-      setColor(vec3(0.3,0,0.0));
-      push();
-      transform(LLT* lwingGeometry);
-      drawSphere(vec3(0),1);
-      pop();
+      // setColor(vec3(0.3,0,0.0));
+      // push();
+      // transform(LLT* lwingGeometry);
+      // drawSphere(vec3(0),1);
+      // pop();
 
 
       setColor(vec3(0, 0.8, 0.0));

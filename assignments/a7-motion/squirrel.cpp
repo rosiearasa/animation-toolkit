@@ -44,36 +44,53 @@ class Squirrel : public atkui::Framework {
       rotate(body.rotation, vec3(0,0,1));
 
       // todo tail
-      //push();
-        //drawSprite(tail);
-      //pop();
+       push();
+        translate(vec3(-80, -100,-200));
+        rotate(tail.rotation, vec3(0,0,1));
+        translate(-tail.pivot);
+        drawSprite(tail);
+      pop();
 
       // arm1
-      //push();
-        //drawSprite(arm1);
-      //pop();
+      push();
+        translate(vec3(width()*0.1, 0,-1));
+        rotate(arm1.rotation, vec3(0,0,1));
+        translate(-arm1.pivot);
+        drawSprite(arm1);
+      pop();
+    
 
-      // leg2
-      //push();
-        //drawSprite(leg2);
-      //pop();
-
+      // leg1
+     push();
+        translate(vec3(width()*0.1, -130,-1));
+        rotate(leg1.rotation, vec3(0,0,1));
+        translate(-leg1.pivot);
+        drawSprite(leg1);
+      pop();
+    
 
       // body
       push();
       translate(-body.pivot);
       drawSprite(body);
       pop();
-    
-      // leg1
-      //push();
-        //drawSprite(leg1);
-      //pop();
-    
       // arm2
-      //push();
-        //drawSprite(arm2);
-      //pop();
+       push();
+        translate(vec3(width()*-0.1, 0,1));
+        rotate(arm2.rotation, vec3(0,0,1));
+        translate(-arm2.pivot);
+        drawSprite(arm2);
+      pop();
+      // leg2
+        push();
+        translate(vec3(width()*-0.2, -120,1));
+        rotate(leg2.rotation, vec3(0,0,1));
+        translate(-leg2.pivot);
+        drawSprite(leg2);
+      pop();
+    
+    
+    
     pop(); 
 
     renderer.fontColor(vec4(0,0,0,1));
