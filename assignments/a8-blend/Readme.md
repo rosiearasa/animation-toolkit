@@ -21,3 +21,8 @@ https://user-images.githubusercontent.com/43176564/141664658-4e10337a-d647-477f-
 
 
 ## Unique
+blending a ball kick using blend
+
+
+https://user-images.githubusercontent.com/43176564/142778743-f244fee0-a4d8-499b-9e79-26437cddf0f6.mov
+
