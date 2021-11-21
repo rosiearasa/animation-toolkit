@@ -60,6 +60,15 @@ public:
       Joint* rwing = skeleton.getByName("RWing");
       rwing->setLocalRotation(glm::angleAxis(-sin(elapsedTime()), vec3(0,0,1))); 
       skeleton.fk();
+  for (int i = 0; i<skeleton.getNumJoints(); i++){
+      Joint *joint = skeleton.getByID(i);
+      if (joint->getParent() == 0)
+        continue;
+
+      vec3 p1 = joint->getGlobalTranslation();
+      vec3 p2 = joint->getParent()->getGlobalTranslation();
+      drawEllipsoid(p1, p2, 5);
+      }
 
       // attach geometry to skeleton 
       Transform B = body->getLocal2Global(); 
@@ -119,6 +128,7 @@ public:
       transform(RT * rwingGeometry);
       drawSphere(vec3(0), 1);
       pop();
+
    }
 
 private:
