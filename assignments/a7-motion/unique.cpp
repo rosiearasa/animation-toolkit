@@ -1,95 +1,74 @@
-#include <iostream>
+#include <random>
+#include <functional>
+#include "atkui/skeleton_drawer.h"
 #include "atkui/framework.h"
 #include "atk/toolkit.h"
+#include "agl/renderer.h"
 
 using namespace glm;
 using namespace atk;
-
-class Butterfly : public atkui::Framework
+using namespace atkui;
+//thriller with a unique scene?
+class Unique : public atkui::Framework
 {
 public:
-   Butterfly() : atkui::Framework(atkui::Perspective) {
-   }
+   Unique() : atkui::Framework(atkui::Perspective) {}
+   virtual ~Unique() {}
 
-   void setup() {
-      Joint* body = new Joint("Body");
-      body->setLocalTranslation(vec3(1,2,1)*100.0f);
-      body->setLocalRotation(glm::angleAxis(glm::radians<float>(45.0f), vec3(0,1,0)));
-      skeleton.addJoint(body);
+  virtual void setup()
+   {
+      BVHReader reader;
+      reader.load("../motions/Warrok/WarrokThriller.bvh", _skeleton, _motion);
 
-      Joint* lwing = new Joint("LWing");
-      lwing->setLocalTranslation(vec3(0.1,0,0)*100.0f);
-      skeleton.addJoint(lwing, body);
+      // vec3 position = vec3(0);
+      // vec3 color = vec3(1,0,0);
+      // float size = 1.0f;
+      // _devil = Devil(position, color, size);
 
-      Joint* rwing = new Joint("RWing");
-      rwing->setLocalTranslation(vec3(-0.1,0,0)*100.0f);
-      skeleton.addJoint(rwing, body);
+      //the devils
+      int colNum = 3;
+      float space = 250.0f;
+      int jitter = 200;
+      vec3 mid = vec3(width() / 2.0f, 0, height() / 2.0f);
+      for (int i = 0; i < numDevils; i++)
+      {
+         int row = i / colNum;
+         int col = i % colNum;
 
-      skeleton.fk();
-   }
+         vec3 position = vec3(row * space + rand() % jitter, 0, col * space + rand() % jitter) - mid;
+         vec3 color = agl::randomUnitVector();
 
-   void scene() {
-      Joint* body = skeleton.getByName("Body");
-      Joint* lwing = skeleton.getByName("LWing");
-      lwing->setLocalRotation(glm::angleAxis(sin(elapsedTime()), vec3(0,0,1)));
-
-      Joint* rwing = skeleton.getByName("RWing");
-      rwing->setLocalRotation(glm::angleAxis(-sin(elapsedTime()), vec3(0,0,1))); 
-      skeleton.fk();
-
-      setColor(vec3(0));
-      for (int i = 0; i < skeleton.getNumJoints(); i++) {
-         Joint* joint = skeleton.getByID(i);
-         if (joint->getParent() == 0) continue;
-
-         vec3 p1 = joint->getGlobalTranslation();
-         vec3 p2 = joint->getParent()->getGlobalTranslation();
-         drawEllipsoid(p1, p2, 5);
+         float size = 0.5f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+         ;
+         _devil.push_back(Devil(position, color, size));
       }
-
-      // attach geometry to skeleton 
-      Transform B = body->getLocal2Global(); 
-      Transform LT = lwing->getLocal2Global(); 
-      Transform RT = rwing->getLocal2Global(); 
-
-      // draw body
-      Transform bodyGeometry(
-         glm::angleAxis(glm::pi<float>()*0.5f, vec3(1,0,0)), // rotation
-         vec3(0), vec3(25, 200, 25)); // position, scale
-
-      Transform lwingGeometry(
-         eulerAngleRO(XYZ, vec3(0,0,0)),
-         vec3(-80,0,0), 
-         vec3(120,20,200));
-
-      Transform rwingGeometry(
-         eulerAngleRO(XYZ, vec3(0,0,0)),
-         vec3(80,0,0), 
-         vec3(120,20,200));
-
-      setColor(vec3(0.4, 0.4, 0.8));
-      push();
-      transform(B * bodyGeometry);
-      drawSphere(vec3(0), 1);
-      pop();
-
-      setColor(vec3(0.8, 0, 0.0));
-      push();
-      transform(LT * lwingGeometry);
-      drawSphere(vec3(0), 1);
-      pop();
-
-      setColor(vec3(0, 0.8, 0.0));
-      push();
-      transform(RT * rwingGeometry);
-      drawSphere(vec3(0), 1);
-      pop();
    }
 
-private:
-   Skeleton skeleton;
+   virtual void scene()
+   {
+      if (!_paused)
+         _motion.update(_skeleton, elapsedTime());
+      for (int i = 0; i < _devil.size(); i++)
+      {
+         _devil[i].draw(_skeleton, *this);
+      }
+   }
+
+   virtual void keyUp(int key, int mods)
+   {
+      if (key == 'P')
+         _paused = !_paused;
+   }
+
+protected:
+   std::vector<Devil> _devil;
+   Motion _motion;
+   Skeleton _skeleton;
+   bool _paused = false;
+   int numDevils = 12;
 };
-int main(int argc, char** argv) {
-   Butterfly viewer;
+int main(int argc, char **argv)
+{
+   Unique viewer;
    viewer.run();
 }

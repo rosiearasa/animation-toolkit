@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cmath>
 
-
 using namespace glm;
 using namespace std;
 using namespace atk;
@@ -34,7 +33,7 @@ public:
     push();
     translate(p);
     rotate(_heading, vec3(0, 1, 0));
-    translate(vec3(0,0,25));
+    translate(vec3(0, 0, 25));
     scale(vec3(10, 10, 50));
     drawCylinder(vec3(0), 1.0f);
     pop();
@@ -44,26 +43,33 @@ public:
   {
     _walk.update(_skeleton, elapsedTime());
 
-    // TODO: Your code here
-    vec3 cameraPos = _skeleton.getRoot()->getGlobalTranslation();
-    vec3 cameraLook =_skeleton.getRoot()->getGlobalTranslation();
-    double l1, l2 = 0.0;
-    
-   //Transform theta = cameraPos- cameraLook;
+    Pose pose = _skeleton.getPose();
+    //set rotation
+    pose.jointRots[0] = glm::angleAxis(_heading, vec3(0, 1, 0));
+    // update
+    Transform t = Transform::Rot(glm::angleAxis(_heading, vec3(0, 1, 0)));
 
-cout<< cameraLook<< endl;
+    pose.rootPos += pos + speed * t.transformVector(vec3(0, 0, 1)) * elapsedTime();
+    _skeleton.setPose(pose);
 
+    Joint *head = _skeleton.getByName("Beta:Head");
+
+    vec3 _pos = head->getLocal2Global().transformPoint(vec3(0, 0, 0));
+
+    vec3 look = head->getLocal2Global().transformPoint(vec3(0, 0, -200));
     // TODO: Override the default camera to follow the character
-    //lookAt(pos, look, vec3(0, 1, 0));
-
+    lookAt(look, _pos, vec3(0, 1, 0));
     // update heading when key is down
-    if (keyIsDown('D')) _heading -= 0.05;
-    if (keyIsDown('A')) _heading += 0.05;
+    if (keyIsDown('D'))
+      _heading -= 0.05;
+    if (keyIsDown('A'))
+      _heading += 0.05;
   }
 
 protected:
   float _heading;
-
+  vec3 pos;
+  float speed;
   Motion _walk;
   Skeleton _skeleton;
   atkui::SkeletonDrawer _drawer;
