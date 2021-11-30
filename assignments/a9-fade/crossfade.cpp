@@ -37,12 +37,12 @@ public:
     int start1 = motion1_.getNumKeys() - numBlendFrames;
     int start2 = 0;
 
-    for (int i = 0; i < motion1_.getNumKeys(); i++)
+    for (int i = start1; i < motion1_.getNumKeys(); i++)
     {
       keys1 = motion1_.getKey(i);
       blend_.appendKey(keys1);
     }
-    for (int j = 0; j < motion2_.getNumKeys(); j++)
+    for (int j = start2; j < motion2_.getNumKeys(); j++)
     {
       keys2 = motion2_.getKey(j);
       blend_.appendKey(keys2);
