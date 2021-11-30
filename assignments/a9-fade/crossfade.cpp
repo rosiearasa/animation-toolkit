@@ -37,10 +37,31 @@ public:
     int start1 = motion1_.getNumKeys() - numBlendFrames;
     int start2 = 0;
 
-   
+    for (int i = 0; i < motion1_.getNumKeys(); i++)
+    {
+      keys1 = motion1_.getKey(i);
+      blend_.appendKey(keys1);
+    }
+    for (int j = 0; j < motion2_.getNumKeys(); j++)
+    {
+      keys2 = motion2_.getKey(j);
+      blend_.appendKey(keys2);
+    }
 
-  }
 
+    Pose finals = Pose::Lerp(keys1, keys2, numBlendFrames);
+    blend_.appendKey(finals);  
+
+
+
+
+      
+    
+     
+   }
+     
+    
+  
 
   void save(const std::string &filename)
   {
@@ -59,7 +80,11 @@ private:
   SkeletonDrawer drawer_;
   Motion motion1_;
   Motion motion2_;
+  Motion final_;
+  
   Motion blend_;
+  Pose keys1;
+  Pose keys2;
 };
 
 std::string PruneName(const std::string &name)

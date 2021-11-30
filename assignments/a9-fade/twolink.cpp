@@ -14,7 +14,7 @@ using namespace glm;
 
 class AIKSimple : public atkui::Framework
 {
- public:
+public:
   AIKSimple() : atkui::Framework(atkui::Perspective),
                 mDrawer(),
                 mGoalPosition()
@@ -75,7 +75,8 @@ class AIKSimple : public atkui::Framework
     ImGui::SliderFloat("X", &mGoalPosition[0], -500.0f, 500.0f);
     ImGui::SliderFloat("Y", &mGoalPosition[1], -500.0f, 500.0f);
     ImGui::SliderFloat("Z", &mGoalPosition[2], -500.0f, 500.0f);
-    if (ImGui::Button("Reset")) reset();
+    if (ImGui::Button("Reset"))
+      reset();
     ImGui::End();
 
     // Rendering
@@ -127,12 +128,53 @@ class AIKSimple : public atkui::Framework
   void solveIKTwoLink(Skeleton &skeleton, const vec3 &goalPosition)
   {
     // todo: implement two link IK algorithm
+    float l1 = length(skeleton.getByID(1)->getLocalTranslation());
+
+    float l2 = length(skeleton.getByID(2)->getLocalTranslation());
+
+    float r = distance(goalPosition, skeleton.getRoot()->getGlobalTranslation());
+
+    float cospi = (r * r - l1 * l1 - l2 * l2) / (-2 * l1 * l2);
+
+    cospi = checkcospi(cospi);
+
+    float theta2z = acos(cospi) - M_PI;
+
+    float sinTheta1z = -l2 * sin(theta2z) / r;
+    float theta1z = asin(sinTheta1z);
+
+    // direction
+
+    float gamma = asin(goalPosition[1] / r);
+    float beta = atan2(-goalPosition[2], goalPosition[0]);
+
+    // final rotations
+    Rot01 = angleAxis(beta, vec3(0, 1, 0)) * angleAxis(gamma, vec3(0, 0, 1)) * angleAxis(theta1z, vec3(0, 0, 1));
+
+    Rot12 = angleAxis(theta2z, vec3(0, 0, 1));
+
+    skeleton.getByID(0)->setLocalRotation(Rot01);
+    skeleton.getByID(1)->setLocalRotation(Rot12);
+    skeleton.fk();
+  }
+  float checkcospi(float cospi)
+  {
+    if (cospi > 1.0f)
+    {
+      cospi = 1.0f;
+    }
+    else if (cospi < -1.0f)
+    {
+      cospi = -1.0f;
+    }
   }
 
- private:
+private:
   atk::Skeleton mActor;
   atkui::SkeletonDrawer mDrawer;
   glm::vec3 mGoalPosition;
+  quat Rot01;
+  quat Rot12;
 };
 
 int main(int argc, char **argv)
