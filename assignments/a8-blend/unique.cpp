@@ -24,6 +24,7 @@ public:
       reader.load("../motions/10/10_02.bvh", skeleton, motion1);
       reader.load("../motions/10/10_03.bvh", skeleton, motion2);
       
+      
        motion.update(skeleton, 0);
       _blend = blend(motion, motion1, _alpha);
        _blend = blend(motion1, motion2, _alpha);

@@ -29,7 +29,20 @@ public:
    }
 
    void lookAtTarget(Joint* head, const vec3& target) {
-      // TODO: Your code here
+      vec3 direction = normalize(target - head->getGlobalTranslation());
+
+      //compute the head rot
+      vec3 z = direction;
+      vec3 x = cross(vec3(0,1,0), z);
+      vec3 y = cross(z, x);
+      quat rotation = quat_cast(mat3x3(x, y, z));
+
+      Transform local2global = Transform::Rot(rotation);
+      local2global.setT(head->getLocal2Global().t());
+      head->setLocal2Parent(head->getLocal2Parent()* head->getLocal2Global().inverse() * local2global);
+
+
+      
       head->fk();
    }
 

@@ -15,34 +15,34 @@ public:
    Unique() : atkui::Framework(atkui::Perspective) {}
    virtual ~Unique() {}
 
-  virtual void setup()
-   {
-      // BVHReader reader;
-      // reader.load("../motions/Warrok/WarrokThriller.bvh", _skeleton, _motion);
+//   virtual void setup()
+//    {
+//       BVHReader reader;
+//       reader.load("../motions/Warrok/WarrokThriller.bvh", _skeleton, _motion);
 
-      // vec3 position = vec3(0);
-      // vec3 color = vec3(1,0,0);
-      // float size = 1.0f;
-      // _devil = Devil(position, color, size);
+//       vec3 position = vec3(0);
+//       vec3 color = vec3(1,0,0);
+//       float size = 1.0f;
+//       _devil = Devil(position, color, size);
 
-      //the devils
-      // int colNum = 3;
-      // float space = 250.0f;
-      // int jitter = 200;
-      // vec3 mid = vec3(width() / 2.0f, 0, height() / 2.0f);
-      // for (int i = 0; i < numDevils; i++)
-      // {
-      //    int row = i / colNum;
-      //    int col = i % colNum;
+//       the devils
+//       int colNum = 3;
+//       float space = 250.0f;
+//       int jitter = 200;
+//       vec3 mid = vec3(width() / 2.0f, 0, height() / 2.0f);
+//       for (int i = 0; i < numDevils; i++)
+//       {
+//          int row = i / colNum;
+//          int col = i % colNum;
 
-      //    vec3 position = vec3(row * space + rand() % jitter, 0, col * space + rand() % jitter) - mid;
-      //    vec3 color = agl::randomUnitVector();
+//          vec3 position = vec3(row * space + rand() % jitter, 0, col * space + rand() % jitter) - mid;
+//          vec3 color = agl::randomUnitVector();
 
-      //    float size = 0.5f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-      //    ;
-      //    _devil.push_back(Devil(position, color, size));
-      // }
-   }
+//          float size = 0.5f + static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+//          ;
+//          _devil.push_back(Devil(position, color, size));
+//       }
+//    }
 
 //    virtual void scene()
 //    {

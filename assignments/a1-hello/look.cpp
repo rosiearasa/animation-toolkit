@@ -22,10 +22,11 @@ public:
             mouseMotion(mousePosition().x, mousePosition().y);
         }
 
-        setColor(vec3(1, 0, 1));
-        vec3 target = vec3(_mouseX, _mouseY, 0);
-        drawSphere(target, 5);
-
+       
+    }
+   virtual void drawWhites()
+    {
+     
         setColor(vec3(1, 1, 1));
         double x = width() * 0.5;
         double y = height() * 0.5;
@@ -38,22 +39,6 @@ public:
         drawSphere(vec3(s1X, y, -1000), radius); //right sphere
         drawSphere(vec3(s2X, y, -1000), radius); //left sphere
 
-        //rotation computations for left and right eyes
-        float angle1 = atan2(_mouseY-y, _mouseX-s1X);
-        float angle2 = atan2(_mouseY-y, _mouseX-s2X);
-        setColor(vec3(0,1,1));
-        drawSphere(vec3(s1X, y,0), 10);
-
-        setColor(vec3(0, 1, 0));
-        vec3 spherepos = vec3(radius*cos(angle1), sin(angle1) , 0);
-
-        vec3 spherepos2 = vec3(radius*cos(angle2), sin(angle2), 0);
-
-        vec3 final = vec3(spherepos);
-        vec3 final2 = vec3(spherepos2);
-
-        drawSphere(final, 10);
-        drawSphere(final2, 10);
     }
 
     virtual void mouseMotion(int x, int y)
