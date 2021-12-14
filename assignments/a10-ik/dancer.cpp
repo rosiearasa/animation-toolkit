@@ -62,11 +62,11 @@ public:
 
       // std::cout << "sin " << sin(elapsedTime()) << std::endl;
    
-      ik.solveIKCCD();
-      ik.solveIKCCD();
-      bool solved = ik.solveIKCCD();
+      // ik.solveIKCCD();
+      // ik.solveIKCCD();
+      // bool solved = ik.solveIKCCD();
 
-      bool solved2 = ik.solveIKCCD();
+      // bool solved2 = ik.solveIKCCD();
     
 
       _skeleton.getByID(_leftFootId)->setLocalRotation(_skeleton.getByName("Beta:LeftFoot")->getLocalRotation() * inverse(_skeleton.getByName("Beta:LeftFoot")->getGlobalRotation()) * _lfootRotation);
